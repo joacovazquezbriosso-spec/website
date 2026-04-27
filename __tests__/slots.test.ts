@@ -28,6 +28,24 @@ describe('getAvailableSlots', () => {
     expect(slots[slots.length - 1]).toBe('19:00')
   })
 
+  it('blocks slots that overlap with a non-grid-aligned booking', () => {
+    // booking at 09:45 for 30 min occupies minutes 585–614
+    // 09:00 slot checks 540–569 → free
+    // 09:30 slot checks 570–599 → blocked (585 is in range)
+    // 10:00 slot checks 600–629 → blocked (600–614 overlap)
+    // 10:30 slot checks 630–659 → free
+    const slots = getAvailableSlots([{ hora: '09:45', duracion: 30 }], 30)
+    expect(slots).toContain('09:00')
+    expect(slots).not.toContain('09:30')
+    expect(slots).not.toContain('10:00')
+    expect(slots).toContain('10:30')
+  })
+
+  it('throws when duracion is zero or negative', () => {
+    expect(() => getAvailableSlots([], 0)).toThrow('duracion must be positive')
+    expect(() => getAvailableSlots([], -1)).toThrow('duracion must be positive')
+  })
+
   it('returns empty array when all slots are taken', () => {
     const turnos = []
     for (let h = 9; h < 20; h++) {

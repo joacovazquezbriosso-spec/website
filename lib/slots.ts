@@ -7,12 +7,15 @@ export function getAvailableSlots(
   existingTurnos: TurnoSlot[],
   duracion: number
 ): string[] {
+  if (duracion <= 0) throw new Error('duracion must be positive')
+
   const OPEN = 9 * 60
   const CLOSE = 20 * 60
 
   const occupied = new Set<number>()
   for (const turno of existingTurnos) {
     const [h, m] = turno.hora.split(':').map(Number)
+    if (isNaN(h) || isNaN(m)) continue
     const start = h * 60 + m
     for (let t = start; t < start + turno.duracion; t++) {
       occupied.add(t)
