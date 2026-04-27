@@ -26,7 +26,9 @@ export async function PATCH(
       data: { estado },
     })
     return NextResponse.json(turno)
-  } catch {
-    return NextResponse.json({ error: 'Turno no encontrado' }, { status: 404 })
+  } catch (e: unknown) {
+    const isNotFound = e instanceof Error && 'code' in e && (e as { code: string }).code === 'P2025'
+    if (isNotFound) return NextResponse.json({ error: 'Turno no encontrado' }, { status: 404 })
+    return NextResponse.json({ error: 'Error al actualizar turno' }, { status: 500 })
   }
 }

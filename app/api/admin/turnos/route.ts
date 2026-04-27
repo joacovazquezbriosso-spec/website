@@ -8,7 +8,10 @@ export async function GET(request: NextRequest) {
 
   const where: Record<string, unknown> = {}
   if (fecha) where.fecha = fecha
-  if (barberoId) where.barberoId = parseInt(barberoId, 10)
+  if (barberoId) {
+    const parsed = parseInt(barberoId, 10)
+    if (!isNaN(parsed)) where.barberoId = parsed
+  }
 
   try {
     const turnos = await prisma.turno.findMany({
