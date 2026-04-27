@@ -11,21 +11,26 @@ export default function AdminLogin() {
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
+    if (!password.trim()) return
     setLoading(true)
     setError('')
 
-    const res = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    })
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      })
 
-    setLoading(false)
-
-    if (res.ok) {
-      router.push('/admin')
-    } else {
-      setError('Contraseña incorrecta')
+      if (res.ok) {
+        router.push('/admin')
+      } else {
+        setError('Contraseña incorrecta')
+      }
+    } catch {
+      setError('Error de conexión. Intentá de nuevo.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -42,6 +47,7 @@ export default function AdminLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Contraseña"
+            required
             className="w-full bg-transparent border border-dark-border text-cream font-cormorant px-4 py-3 focus:border-gold outline-none placeholder:text-dark-muted"
           />
 

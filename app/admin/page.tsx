@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface Turno {
   id: number
@@ -24,25 +24,39 @@ export default function AdminPanel() {
   const [turnos, setTurnos] = useState<Turno[]>([])
   const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-  async function loadTurnos() {
+  const loadTurnos = useCallback(async () => {
     setLoading(true)
-    const res = await fetch(`/api/admin/turnos?fecha=${fecha}`)
-    const data = await res.json()
-    setTurnos(data)
-    setLoading(false)
-  }
+    setError('')
+    try {
+      const res = await fetch(`/api/admin/turnos?fecha=${fecha}`)
+      if (!res.ok) { setError('Error al cargar turnos'); setTurnos([]); return }
+      const data = await res.json()
+      setTurnos(data)
+    } catch {
+      setError('Error de conexión')
+      setTurnos([])
+    } finally {
+      setLoading(false)
+    }
+  }, [fecha])
 
   async function updateEstado(id: number, estado: string) {
-    await fetch(`/api/admin/turnos/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ estado }),
-    })
-    loadTurnos()
+    try {
+      const res = await fetch(`/api/admin/turnos/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ estado }),
+      })
+      if (!res.ok) { setError('Error al actualizar estado'); return }
+      await loadTurnos()
+    } catch {
+      setError('Error de conexión')
+    }
   }
 
-  useEffect(() => { loadTurnos() }, [fecha])
+  useEffect(() => { loadTurnos() }, [loadTurnos])
 
   return (
     <div className="min-h-screen bg-dark text-cream px-8 py-12">
@@ -60,14 +74,17 @@ export default function AdminPanel() {
 
         {/* Filter by date */}
         <div className="flex items-center gap-4 mb-8">
-          <label className="font-cormorant text-gold text-xs tracking-widest2 uppercase">Fecha</label>
+          <label htmlFor="fecha-filter" className="font-cormorant text-gold text-xs tracking-widest2 uppercase">Fecha</label>
           <input
+            id="fecha-filter"
             type="date"
             value={fecha}
             onChange={(e) => setFecha(e.target.value)}
             className="bg-transparent border border-dark-border text-cream font-cormorant px-4 py-2 focus:border-gold outline-none"
           />
         </div>
+
+        {error && <p className="font-cormorant text-red-400 text-sm mb-4">{error}</p>}
 
         {/* Table */}
         {loading ? (
@@ -99,6 +116,7 @@ export default function AdminPanel() {
                       <select
                         value={t.estado}
                         onChange={(e) => updateEstado(t.id, e.target.value)}
+                        aria-label={`Estado para ${t.clienteNombre}`}
                         className="bg-dark border border-dark-border text-cream text-xs px-2 py-1 focus:border-gold outline-none"
                       >
                         {ESTADOS.map((e) => (
