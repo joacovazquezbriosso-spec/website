@@ -16,7 +16,7 @@ export default function Equipo({ barberos }: { barberos: Barbero[] }) {
                   src={b.foto}
                   alt={b.nombre}
                   fill
-                  className="object-cover grayscale"
+                  className="object-cover"
                 />
               </div>
               <div>
