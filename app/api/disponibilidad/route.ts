@@ -4,29 +4,37 @@ import { getAvailableSlots } from '@/lib/slots'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const barberoId = Number(searchParams.get('barberoId'))
+  const barberoId = parseInt(searchParams.get('barberoId') ?? '', 10)
   const fecha = searchParams.get('fecha')
-  const servicioId = Number(searchParams.get('servicioId'))
+  const servicioId = parseInt(searchParams.get('servicioId') ?? '', 10)
 
-  if (!barberoId || !fecha || !servicioId) {
+  if (isNaN(barberoId) || !fecha || isNaN(servicioId)) {
     return NextResponse.json({ error: 'Parámetros requeridos: barberoId, fecha, servicioId' }, { status: 400 })
   }
 
-  const servicio = await prisma.servicio.findUnique({ where: { id: servicioId } })
-  if (!servicio) {
-    return NextResponse.json({ error: 'Servicio no encontrado' }, { status: 404 })
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    return NextResponse.json({ error: 'fecha debe tener formato YYYY-MM-DD' }, { status: 400 })
   }
 
-  const turnosDelDia = await prisma.turno.findMany({
-    where: { barberoId, fecha, estado: { not: 'cancelado' } },
-    select: { hora: true, servicio: { select: { duracion: true } } },
-  })
+  try {
+    const servicio = await prisma.servicio.findUnique({ where: { id: servicioId } })
+    if (!servicio) {
+      return NextResponse.json({ error: 'Servicio no encontrado' }, { status: 404 })
+    }
 
-  const existingSlots = turnosDelDia.map((t) => ({
-    hora: t.hora,
-    duracion: t.servicio.duracion,
-  }))
+    const turnosDelDia = await prisma.turno.findMany({
+      where: { barberoId, fecha, estado: { not: 'cancelado' } },
+      select: { hora: true, servicio: { select: { duracion: true } } },
+    })
 
-  const slots = getAvailableSlots(existingSlots, servicio.duracion)
-  return NextResponse.json({ slots })
+    const existingSlots = turnosDelDia.map((t) => ({
+      hora: t.hora,
+      duracion: t.servicio.duracion,
+    }))
+
+    const slots = getAvailableSlots(existingSlots, servicio.duracion)
+    return NextResponse.json({ slots })
+  } catch {
+    return NextResponse.json({ error: 'Error al obtener disponibilidad' }, { status: 500 })
+  }
 }
