@@ -1,12 +1,6 @@
 import SectionLabel from '@/components/ui/SectionLabel'
 import GoldDivider from '@/components/ui/GoldDivider'
-
-interface Servicio {
-  id: number
-  nombre: string
-  precio: number
-  duracion: number
-}
+import type { Servicio } from '@/lib/types'
 
 export default function Servicios({ servicios }: { servicios: Servicio[] }) {
   return (
