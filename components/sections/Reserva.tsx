@@ -61,8 +61,9 @@ export default function Reserva({ barberos, servicios }: ReservaProps) {
       }
     } catch {
       setError('Error de conexión. Intentá de nuevo.')
+    } finally {
+      setSubmitting(false)
     }
-    setSubmitting(false)
   }
 
   function resetForm() {
@@ -72,6 +73,7 @@ export default function Reserva({ barberos, servicios }: ReservaProps) {
     setFecha('')
     setHora('')
     setSlots([])
+    setLoadingSlots(false)
     setNombre('')
     setTel('')
     setError('')
@@ -163,7 +165,7 @@ export default function Reserva({ barberos, servicios }: ReservaProps) {
                     key={s.id}
                     onClick={() => {
                       setServicioId(s.id)
-                      if (fecha) fetchSlots(barberoId!, s.id, fecha)
+                      if (fecha) fetchSlots(barberoId ?? 0, s.id, fecha)
                     }}
                     className={`p-4 border text-left transition-colors hover:border-gold ${
                       servicioId === s.id ? 'border-gold' : 'border-dark-border'
@@ -185,7 +187,7 @@ export default function Reserva({ barberos, servicios }: ReservaProps) {
                 value={fecha}
                 onChange={(e) => {
                   setFecha(e.target.value)
-                  if (servicioId) fetchSlots(barberoId!, servicioId, e.target.value)
+                  if (servicioId) fetchSlots(barberoId ?? 0, servicioId, e.target.value)
                 }}
                 className="w-full bg-transparent border border-dark-border text-cream font-cormorant px-4 py-3 focus:border-gold outline-none transition-colors"
               />
