@@ -10,5 +10,36 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+}
+
+model Barbero {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  especialidad String
+  foto         String
+  activo       Boolean  @default(true)
+  turnos       Turno[]
+}
+
+model Servicio {
+  id       Int      @id @default(autoincrement())
+  nombre   String
+  precio   Int
+  duracion Int
+  activo   Boolean  @default(true)
+  turnos   Turno[]
+}
+
+model Turno {
+  id            Int      @id @default(autoincrement())
+  barberoId     Int
+  servicioId    Int
+  clienteNombre String
+  clienteTel    String
+  fecha         String
+  hora          String
+  estado        String   @default("pendiente")
+  creadoEn      DateTime @default(now())
+  barbero       Barbero  @relation(fields: [barberoId], references: [id])
+  servicio      Servicio @relation(fields: [servicioId], references: [id])
 }
