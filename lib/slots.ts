@@ -9,10 +9,16 @@ export function getAvailableSlots(
 ): string[] {
   if (duracion <= 0) throw new Error('duracion must be positive')
 
-  const OPEN = 9 * 60
+  const OPEN = 10 * 60
   const CLOSE = 20 * 60
+  const STEP = 45
+  const LUNCH_START = 14 * 60
+  const LUNCH_END = 15 * 60
 
   const occupied = new Set<number>()
+
+  for (let t = LUNCH_START; t < LUNCH_END; t++) occupied.add(t)
+
   for (const turno of existingTurnos) {
     const [h, m] = turno.hora.split(':').map(Number)
     if (isNaN(h) || isNaN(m)) continue
@@ -23,7 +29,7 @@ export function getAvailableSlots(
   }
 
   const slots: string[] = []
-  for (let t = OPEN; t + duracion <= CLOSE; t += 30) {
+  for (let t = OPEN; t + duracion <= CLOSE; t += STEP) {
     let free = true
     for (let i = t; i < t + duracion; i++) {
       if (occupied.has(i)) { free = false; break }

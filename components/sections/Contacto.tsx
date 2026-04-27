@@ -10,27 +10,37 @@ export default function Contacto() {
           <div className="space-y-6 font-cormorant">
             <div>
               <p className="text-gold text-xs tracking-widest2 uppercase mb-2">Dirección</p>
-              <p className="text-cream text-lg">Av. Corrientes 1234</p>
-              <p className="text-dark-muted">Buenos Aires, Argentina</p>
+              <a
+                href="https://www.google.com/maps/place/Barberia+Nueve+Ocho+%2298%22/@-34.8043529,-55.9011786,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cream hover:text-gold transition-colors"
+              >
+                Barbería Nueve Ocho
+              </a>
             </div>
             <div>
               <p className="text-gold text-xs tracking-widest2 uppercase mb-2">Horarios</p>
-              <p className="text-cream text-lg">Lunes a Sábado</p>
-              <p className="text-dark-muted">9:00 — 20:00 hs</p>
+              <p className="text-cream text-lg">Martes a Sábado</p>
+              <p className="text-dark-muted">10:00 — 20:00 hs</p>
             </div>
             <div>
               <p className="text-gold text-xs tracking-widest2 uppercase mb-2">Contacto</p>
               <a
-                href="https://wa.me/5491100000000"
+                href="https://wa.me/598095006417"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-cream hover:text-gold transition-colors block"
               >
-                +54 9 11 0000-0000
+                095 006 417
               </a>
               <a
-                href="https://instagram.com/barberianueveocho"
+                href="https://www.instagram.com/nueveocho.barberia/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-cream hover:text-gold transition-colors block mt-1"
               >
-                @barberianueveocho
+                @nueveocho.barberia
               </a>
             </div>
           </div>
@@ -38,7 +48,7 @@ export default function Contacto() {
           {/* Google Maps embed */}
           <div className="min-h-[200px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.016863498282!2d-58.38414492346188!3d-34.60373315736544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacfb2e54dbb%3A0x8dd3ef20a2c81f49!2sAv.%20Corrientes%201234%2C%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1682000000000!5m2!1ses!2sar"
+              src="https://maps.google.com/maps?q=-34.8043529,-55.9011786&z=17&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: 200, filter: 'grayscale(1) invert(0.9)' }}

@@ -18,10 +18,10 @@ async function main() {
 
   await prisma.servicio.createMany({
     data: [
-      { nombre: 'Corte Clásico', precio: 8000, duracion: 30 },
-      { nombre: 'Afeitado Navaja', precio: 6000, duracion: 30 },
-      { nombre: 'Corte + Barba', precio: 12000, duracion: 60 },
-      { nombre: 'Tratamiento Capilar', precio: 9000, duracion: 45 },
+      { nombre: 'Corte', precio: 500, duracion: 30 },
+      { nombre: 'Barba', precio: 300, duracion: 20 },
+      { nombre: 'Corte + Barba', precio: 700, duracion: 45 },
+      { nombre: 'Mechas + Corte', precio: 1790, duracion: 90 },
     ],
   })
 

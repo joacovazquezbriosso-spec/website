@@ -16,6 +16,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'fecha debe tener formato YYYY-MM-DD' }, { status: 400 })
   }
 
+  const [y, mo, d] = fecha.split('-').map(Number)
+  const diaSemana = new Date(y, mo - 1, d).getDay()
+  if (diaSemana === 0 || diaSemana === 1) {
+    return NextResponse.json({ slots: [] })
+  }
+
   try {
     const servicio = await prisma.servicio.findUnique({ where: { id: servicioId } })
     if (!servicio) {

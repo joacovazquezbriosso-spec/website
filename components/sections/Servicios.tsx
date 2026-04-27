@@ -18,9 +18,11 @@ export default function Servicios({ servicios }: { servicios: Servicio[] }) {
                 <h3 className="font-cormorant text-cream text-lg tracking-widest uppercase">
                   {s.nombre}
                 </h3>
-                <p className="font-cormorant text-dark-muted text-sm mt-1">
-                  {s.duracion} min
-                </p>
+                {s.duracion > 0 && (
+                  <p className="font-cormorant text-dark-muted text-sm mt-1">
+                    {s.duracion} min
+                  </p>
+                )}
               </div>
               <span className="font-cormorant text-gold text-lg">
                 ${s.precio.toLocaleString('es-AR')}

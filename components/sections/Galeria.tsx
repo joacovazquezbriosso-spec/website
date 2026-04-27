@@ -7,12 +7,12 @@ import 'yet-another-react-lightbox/styles.css'
 import SectionLabel from '@/components/ui/SectionLabel'
 
 const FOTOS = [
-  { src: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=800&q=80', alt: 'Corte 1' },
-  { src: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=80', alt: 'Corte 2' },
-  { src: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=800&q=80', alt: 'Corte 3' },
-  { src: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=800&q=80', alt: 'Corte 4' },
-  { src: 'https://images.unsplash.com/photo-1562004760-aceed7bb0fe3?w=800&q=80', alt: 'Corte 5' },
-  { src: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=800&q=80', alt: 'Corte 6' },
+  { src: '/corte1.jpg', alt: 'Corte 1' },
+  { src: '/corte2.jpg', alt: 'Corte 2' },
+  { src: '/corte3.jpg', alt: 'Corte 3' },
+  { src: '/corte4.jpg', alt: 'Corte 4' },
+  { src: '/corte5.jpg', alt: 'Corte 5' },
+  { src: '/corte6.jpg', alt: 'Corte 6' },
 ]
 
 export default function Galeria() {
