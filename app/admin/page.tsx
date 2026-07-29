@@ -21,7 +21,10 @@ const ESTADO_COLORS: Record<string, string> = {
 }
 
 function waLink(tel: string, nombre: string, fecha: string, hora: string) {
-  const phone = tel.replace(/\D/g, '')
+  let phone = tel.replace(/\D/g, '')
+  if (phone.startsWith('0')) phone = '598' + phone.slice(1)
+  else if (!phone.startsWith('598')) phone = '598' + phone
+
   const msg = `Hola ${nombre}, tu turno en Barbería Nueve Ocho está confirmado para el ${fecha} a las ${hora}. ¡Te esperamos!`
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
 }
