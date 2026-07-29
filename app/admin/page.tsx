@@ -20,6 +20,12 @@ const ESTADO_COLORS: Record<string, string> = {
   cancelado: 'text-red-500/60',
 }
 
+function waLink(tel: string, nombre: string, fecha: string, hora: string) {
+  const phone = tel.replace(/\D/g, '')
+  const msg = `Hola ${nombre}, tu turno en Barbería Nueve Ocho está confirmado para el ${fecha} a las ${hora}. ¡Te esperamos!`
+  return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
+}
+
 export default function AdminPanel() {
   const [turnos, setTurnos] = useState<Turno[]>([])
   const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
@@ -61,7 +67,6 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-dark text-cream px-8 py-12">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex items-center justify-between mb-12">
           <div>
             <p className="font-cormorant text-gold text-xs tracking-widest2 uppercase mb-1">Panel Admin</p>
@@ -72,7 +77,6 @@ export default function AdminPanel() {
           </a>
         </div>
 
-        {/* Filter by date */}
         <div className="flex items-center gap-4 mb-8">
           <label htmlFor="fecha-filter" className="font-cormorant text-gold text-xs tracking-widest2 uppercase">Fecha</label>
           <input
@@ -86,7 +90,6 @@ export default function AdminPanel() {
 
         {error && <p className="font-cormorant text-red-400 text-sm mb-4">{error}</p>}
 
-        {/* Table */}
         {loading ? (
           <p className="font-cormorant text-dark-muted">Cargando...</p>
         ) : turnos.length === 0 ? (
@@ -96,7 +99,7 @@ export default function AdminPanel() {
             <table className="w-full font-cormorant text-sm">
               <thead>
                 <tr className="border-b border-dark-border">
-                  {['Hora', 'Cliente', 'Teléfono', 'Barbero', 'Servicio', 'Estado', 'Acción'].map((h) => (
+                  {['Hora', 'Cliente', 'Teléfono', 'Barbero', 'Servicio', 'Estado', 'Acción', 'WhatsApp'].map((h) => (
                     <th key={h} className="text-left text-gold text-xs tracking-widest uppercase px-4 py-3">
                       {h}
                     </th>
@@ -123,6 +126,16 @@ export default function AdminPanel() {
                           <option key={e} value={e}>{e}</option>
                         ))}
                       </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      <a
+                        href={waLink(t.clienteTel, t.clienteNombre, t.fecha, t.hora)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-cormorant text-xs text-green-500 border border-green-500/40 px-3 py-1 hover:bg-green-500/10 transition-colors"
+                      >
+                        Avisar
+                      </a>
                     </td>
                   </tr>
                 ))}
